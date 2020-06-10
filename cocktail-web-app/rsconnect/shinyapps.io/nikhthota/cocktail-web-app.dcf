@@ -1,0 +1,12 @@
+name: cocktail-web-app
+title: cocktail-web-app
+username:
+account: nikhthota
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2437988
+bundleId: 3253853
+url: https://nikhthota.shinyapps.io/cocktail-web-app/
+when: 1591823861.87839
+asMultiple: FALSE
+asStatic: FALSE
