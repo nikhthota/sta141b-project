@@ -24,77 +24,82 @@ shinyUI(fluidPage(
     headerPanel("Cocktail Recipe App"),
     
     sidebarLayout(
-        div(
-            sidebarPanel(
-                wellPanel(
-                    h5("Give me a random recipe:"),
-                    actionButton("random", "Random!")
-                ),
-                wellPanel(
-                    h5("Filter by Ingredient:"),
-                    selectizeInput("mult_ingredients",
-                                   label = "Ingredients",
-                                   choices = ingred_options, 
-                                   multiple = TRUE)
-                ), 
-                wellPanel(
-                    h5("Filter by Type of Drink:"),
-                    selectInput("ifAlcohol", 
-                                label = "Type of Drink",
-                                choices = c("Select a Type", ifAlcohol_options))
-                ),
-                wellPanel(
-                    h5("Filter by Type of Glass:"),
-                    selectInput("glassType",
-                                label = "Type of Glass",
-                                choices = c("Select a Type", glass_options))
-                ),
-                wellPanel(
-                    h5("Filter by First Letter/Character:"),
-                    selectInput("byLetter", 
-                                label = "First Letter/Character",
-                                choices = c("Select a Letter", firstChar_options))
-                ),
-                wellPanel(
-                    h5("Recipes Matching Latest Selected Filter:"),
-                    uiOutput("recipeMatchInputs")
-                )
-            )),
+        
+        sidebarPanel(
+            wellPanel(
+                h5("Give me a random recipe:"),
+                actionButton("random", "Random!")
+            ),
+            wellPanel(
+                h5("Filter by Ingredient:"),
+                selectizeInput("mult_ingredients",
+                               label = "Ingredients",
+                               choices = ingred_options, 
+                               multiple = TRUE)
+            ), 
+            wellPanel(
+                h5("Filter by Type of Drink:"),
+                selectInput("ifAlcohol", 
+                            label = "Type of Drink",
+                            choices = c("Select a Type", ifAlcohol_options))
+            ),
+            wellPanel(
+                h5("Filter by Type of Glass:"),
+                selectInput("glassType",
+                            label = "Type of Glass",
+                            choices = c("Select a Type", glass_options))
+            ),
+            wellPanel(
+                h5("Filter by First Letter/Character:"),
+                selectInput("byLetter", 
+                            label = "First Letter/Character",
+                            choices = c("Select a Letter", firstChar_options))
+            ),
+            wellPanel(
+                h5("Recipes Matching Latest Selected Filter:"),
+                uiOutput("recipeMatchInputs")
+            )
+        ),
         
         mainPanel(
             tabsetPanel(type = "tabs",
-                tabPanel("Recipe",
-                         br(),
-                         fluidRow(
-                             column(
-                                 6,
-                                 textOutput("recipeTitle"),
+                        tabPanel("Recipe",
                                  br(),
-                                 tableOutput("recipeIngr_Measure"), 
-                                 textOutput("recipeInstructions")
-                             ),
-                             column(
-                                 6,
-                                 htmlOutput("recipeImage")
-                             )
-                         )
-                ),
-                tabPanel("How does my drink compare?",
-                         br(),
-                         fluidRow(
-                             column(6, plotOutput("numIngredPlot")),
-                             column(6, plotOutput("byDrinkPlot"))
-                             ),
-                         fluidRow(
-                             column(12, plotOutput("byLetterPlot"))
-                         ),
-                         fluidRow(
-                             column(12, plotOutput("byGlassPlot"))
-                         )
-                ) #close compare tabPanel
+                                 fluidRow(
+                                     column(
+                                         6,
+                                         textOutput("recipeTitle"),
+                                         br(),
+                                         wellPanel(tableOutput("recipeIngr_Measure")), 
+                                         textOutput("recipeInstructions")
+                                     ),
+                                     column(
+                                         6,
+                                         htmlOutput("recipeImage")
+                                     )
+                                 )
+                        ),
+                        tabPanel("How does my drink compare?",
+                                 br(),
+                                 fluidRow(
+                                     column(6, plotOutput("numIngredPlot")),
+                                     column(6, plotOutput("byDrinkPlot"))
+                                 ),
+                                 fluidRow(
+                                     column(12, plotOutput("byLetterPlot"))
+                                 ),
+                                 fluidRow(
+                                     column(12, plotOutput("byGlassPlot"))
+                                 )
+                        ) #close compare tabPanel
             ) #close tabsetPanel
         ) #close Main Panel
-
-            #verbatimTextOutput("testInputOptions")
-    )
+        
+        #verbatimTextOutput("testInputOptions")
+    ),#close sidebar Layout
+    
+    tags$head(tags$style("#recipeTitle{color: black;
+                                 font-size: 18px;
+                                 font-style: bold;}"
+    ))
 ))
