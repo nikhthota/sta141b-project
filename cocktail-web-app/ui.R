@@ -62,17 +62,39 @@ shinyUI(fluidPage(
             )),
         
         mainPanel(
-            textOutput("recipeTitle"),
-            br(),
-            tableOutput("recipeIngr_Measure"), 
-            textOutput("recipeInstructions"),
-            htmlOutput("recipeImage"),
-            plotOutput("numIngredPlot"),
-            plotOutput("byLetterPlot"),
-            plotOutput("byGlassPlot"),
-            plotOutput("byDrinkPlot")
+            tabsetPanel(type = "tabs",
+                tabPanel("Recipe",
+                         br(),
+                         fluidRow(
+                             column(
+                                 6,
+                                 textOutput("recipeTitle"),
+                                 br(),
+                                 tableOutput("recipeIngr_Measure"), 
+                                 textOutput("recipeInstructions")
+                             ),
+                             column(
+                                 6,
+                                 htmlOutput("recipeImage")
+                             )
+                         )
+                ),
+                tabPanel("How does my drink compare?",
+                         br(),
+                         fluidRow(
+                             column(6, plotOutput("numIngredPlot")),
+                             column(6, plotOutput("byDrinkPlot"))
+                             ),
+                         fluidRow(
+                             column(12, plotOutput("byLetterPlot"))
+                         ),
+                         fluidRow(
+                             column(12, plotOutput("byGlassPlot"))
+                         )
+                ) #close compare tabPanel
+            ) #close tabsetPanel
+        ) #close Main Panel
+
             #verbatimTextOutput("testInputOptions"),
-        )
     )
-)
-)
+))
