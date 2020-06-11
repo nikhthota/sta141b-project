@@ -28,11 +28,11 @@ drink_details_df <- drink_details_df %>% select(idDrink, strDrink, strCategory, 
 
 shinyServer(function(input, output, session) {
     
-    ##### Random Recipe Generation -----------------------------
-    
-    # Get random cocktail recipe only when the user presses the 'Random!' button
+    ##### CREATE REACTIVE VALUES FOR RECIPES ----------------------
     
     recipe <- reactiveValues(details = NULL)
+    
+    ##### RANDOM RECIPE GENERATION --- -----------------------------
     
     # random recipe 
     observeEvent(input$random, {
@@ -40,6 +40,8 @@ shinyServer(function(input, output, session) {
         recipe$details <- fromJSON(str_glue("https://www.thecocktaildb.com/api/json/v2/{api_key}/random.php",
                                             api_key = api_key))$drinks
     })
+    
+    ##### OBSERVEEVENT FOR FILTERING --------------------------------
     
     # filter by ingredient
     observeEvent(input$mult_ingredients, {
@@ -54,7 +56,7 @@ shinyServer(function(input, output, session) {
     # filter by type of category
     observeEvent(input$ifAlcohol, {
         print("type of category selection updated")
-        req(!is.null(input$ifAlcohol))
+        req(!is.null(input$mult_ingredients))
         if(input$ifAlcohol != "Select a type"){
             recipe$drinks <- fromJSON(str_glue("https://www.thecocktaildb.com/api/json/v2/{api_key}/filter.php?a={type}",
                                                       api_key = api_key, type = str_replace_all(input$ifAlcohol, ' ', '_')))$drinks
@@ -81,6 +83,7 @@ shinyServer(function(input, output, session) {
         }
     })
     
+    # create a selectInput object that has all of the recipe names that match the selected filter
     output$recipeMatchInputs <- renderUI ({
         req(!is.null(recipe$drinks))
         print("drink matches showing")
@@ -88,16 +91,16 @@ shinyServer(function(input, output, session) {
             selectInput("recipeMatch", label = NULL,
                         choices = recipe$drinks$idDrink %>% set_names(recipe$drinks$strDrink))
         } else {
-            print("No matching drinks found!")
-        }
+            print("No matching drinks found, try another filter!")
+        } 
     })
     
+    # When a recipe is selected, save the value in the reactiveValue
     observeEvent(input$recipeMatch, {
         print("recipe match selected")
         recipe$details <- fromJSON(str_glue("https://www.thecocktaildb.com/api/json/v2/{api_key}/lookup.php?i={recipe_id}",
                                             api_key = api_key, recipe_id = input$recipeMatch))$drinks
     })
-    
     
     output$testInputOptions <- renderPrint({
         req(!is.null(recipe$drinks))
@@ -105,12 +108,16 @@ shinyServer(function(input, output, session) {
         recipe$drinks
     })
     
+    ##### RECIPE DETAILS PRINTED ON MAIN RECIPE TAB -----------------------
+    
+    # print out the selected recipe title
     output$recipeTitle <- renderText ({
         req(!is.null(recipe$details))
         print("title updated")
         recipe$details$strDrink
     })
     
+    # print out the selected recipe ingredients and measurements
     output$recipeIngr_Measure <- renderTable({
         req(!is.null(recipe$details))
         drink <- recipe$details
@@ -139,20 +146,22 @@ shinyServer(function(input, output, session) {
         
     })
     
+    # print out the selected recipe instructions
     output$recipeInstructions <- renderText({
-        # Print out recipe instructions
         req(!is.null(recipe$details))
         print("instructions updated")
         recipe$details$strInstructions
     })
     
+    # print out the selected recipe image from URL 
     output$recipeImage <- renderText({
-        # Print out image 
         req(!is.null(recipe$details))
         print("image updated")
         src = paste0(recipe$details$strDrinkThumb)
         paste0('<img src="', src,'" ', 'style="width:250px;height:250px;">')
     })
+    
+    ##### PLOTS ON COMPARISON TAB -------------------------------------------
     
     # bar plot by ingredient
     output$numIngredPlot <- renderPlot({

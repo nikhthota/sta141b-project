@@ -24,40 +24,42 @@ shinyUI(fluidPage(
     headerPanel("Cocktail Recipe App"),
     
     sidebarLayout(
-        
         sidebarPanel(
             wellPanel(
-                h5("Give me a random recipe:"),
-                actionButton("random", "Random!")
+                h5("Find me a random recipe:"),
+                actionButton("random", "Random!"),
             ),
+            h4("Select one of the following filters to apply:"),
             wellPanel(
-                h5("Filter by Ingredient:"),
+                h5("Filter by Ingredients:"),
                 selectizeInput("mult_ingredients",
-                               label = "Ingredients",
+                               label = NULL,
                                choices = ingred_options, 
                                multiple = TRUE)
             ), 
             wellPanel(
                 h5("Filter by Type of Drink:"),
                 selectInput("ifAlcohol", 
-                            label = "Type of Drink",
+                            label = NULL,
                             choices = c("Select a Type", ifAlcohol_options))
             ),
             wellPanel(
                 h5("Filter by Type of Glass:"),
                 selectInput("glassType",
-                            label = "Type of Glass",
+                            label = NULL,
                             choices = c("Select a Type", glass_options))
             ),
             wellPanel(
                 h5("Filter by First Letter/Character:"),
                 selectInput("byLetter", 
-                            label = "First Letter/Character",
+                            label = NULL,
                             choices = c("Select a Letter", firstChar_options))
             ),
             wellPanel(
-                h5("Recipes Matching Latest Selected Filter:"),
-                uiOutput("recipeMatchInputs")
+                h5(strong("Matching Recipes:")),
+                h6("(by most recently selected filter)"),
+                uiOutput("recipeMatchInputs"),
+                class = "wellPanelRecipe", id = "wP-R"
             )
         ),
         
@@ -75,7 +77,8 @@ shinyUI(fluidPage(
                                      ),
                                      column(
                                          6,
-                                         htmlOutput("recipeImage")
+                                         htmlOutput("recipeImage")#,
+                                         #verbatimTextOutput("testInputOptions")
                                      )
                                  )
                         ),
@@ -95,11 +98,13 @@ shinyUI(fluidPage(
             ) #close tabsetPanel
         ) #close Main Panel
         
-        #verbatimTextOutput("testInputOptions")
+        
     ),#close sidebar Layout
     
     tags$head(tags$style("#recipeTitle{color: black;
                                  font-size: 18px;
-                                 font-style: bold;}"
-    ))
+                                 font-style: bold;}"),
+              tags$style("#wP-R{background-color: #c9d7e8;}"),
+              tags$style("#matchingRecipeHeader{font-size: 14px; font-style: bold;}")
+              )
 ))
