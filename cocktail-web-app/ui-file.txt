@@ -24,7 +24,7 @@ shinyUI(fluidPage(
     headerPanel("Cocktail Recipe App"),
     
     sidebarLayout(
-        div(
+        
             sidebarPanel(
                 wellPanel(
                     h5("Give me a random recipe:"),
@@ -59,7 +59,7 @@ shinyUI(fluidPage(
                     h5("Recipes Matching Latest Selected Filter:"),
                     uiOutput("recipeMatchInputs")
                 )
-            )),
+            ),
         
         mainPanel(
             tabsetPanel(type = "tabs",
@@ -96,5 +96,10 @@ shinyUI(fluidPage(
         ) #close Main Panel
 
             #verbatimTextOutput("testInputOptions")
-    )
+    ),#close sidebar Layout
+    
+    tags$head(tags$style("#recipeTitle{color: black;
+                                 font-size: 18px;
+                                 font-style: bold;}"
+    ))
 ))
